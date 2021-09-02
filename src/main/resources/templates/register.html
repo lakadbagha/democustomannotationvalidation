@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Register Student</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <form>
+                    <fieldset>
+                        <legend>Student Registration</legend>
+                        <div class="form-group">
+                            <label for="inputStudentNumber">Student Number</label>
+                            <input type="text" class="form-control" id="inputStudentNumber" aria-describedby="studentNumberHelp" placeholder="Student Number" required="">
+                            <small id="studentNumberHelp" class="form-text text-muted">Please enter unique student number.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputFullName">Full Name</label>
+                            <input type="text" class="form-control" id="inputFullName" placeholder="Full Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAge">Age</label>
+                            <input type="text" class="form-control" id="inputAge" placeholder="Age">
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <select class="form-select" id="department">
+                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Industrial Engineering">Industrial Engineering</option>
+                                <option value="Mechatronics Engineering">Mechatronics Engineering</option>
+                                <option value="Software Engineering">Software Engineering</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="submitInformation()">Submit</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function submitInformation() {
+                var id = $("#inputStudentNumber").val();
+                var fullName = $("#inputFullName").val();
+                var age = $("#inputAge").val();
+                var department = $("#department").val();
+                if (id.length < 7) {
+                    alert("Please enter a valid ID");
+                    return;
+                }
+                var json = {"id": id, "fullName": fullName, "age": age, "department": department}
+                $.ajax({
+                    type: 'POST',
+                    url: '/send',
+                    data: JSON.stringify(json),
+                    contentType: "application/json",
+                    dataType: 'json', success: function (response, textStatus, jqXHR) {
+                        console.log(response);
+                        if (response.resultValue == "saved") {
+                            Alert("saved new record")
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
